@@ -1,0 +1,298 @@
+% Document LaTeX (texte brut .txt)
+% Copiez ce contenu dans un .tex si besoin de compilation
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=2.2cm}
+
+\title{CDG Invest -- Explication detaillee des concepts et calculs}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Vue d ensemble du workflow}
+Le dossier \texttt{CDG} contient plusieurs modules complementaires qui couvrent:
+\begin{itemize}
+  \item le \textbf{scoring financier} (Altman Z''),
+  \item le \textbf{stress testing} par simulation Monte Carlo,
+  \item la \textbf{valorisation d options reelles} via arbre binomial,
+  \item la \textbf{veille de marche} (donnees boursieres, indicateurs techniques).
+\end{itemize}
+Le flux logique est: \textit{donnees} $\rightarrow$ \textit{calculs} $\rightarrow$ \textit{rapports} $\rightarrow$ \textit{courbes}.
+
+\section{Relations entre concepts et cheminement}
+\subsection{Pourquoi vous ne voyez pas un lien direct}
+Dans ce projet, les modules sont \\textbf{separes} et servent des objectifs
+complementaires. Il n y a \emph{pas} de lien automatique entre eux dans le code.
+\begin{itemize}
+  \item \textbf{Altman Z''} utilise des \emph{donnees comptables} (bilan, EBIT) pour
+  estimer un \textbf{risque de defaillance}.
+  \item \textbf{Monte Carlo} utilise des \emph{hypotheses de marche} ($\mu$, $\sigma$)
+  pour simuler une \textbf{distribution de valeur} du portefeuille.
+  \item \textbf{VaR/CVaR} sont des \emph{statistiques} calculees sur la distribution
+  generee par Monte Carlo; ce ne sont pas des resultats du Z''.
+\end{itemize}
+
+\subsection{Lien conceptuel (meme but, angles differents)}
+Les concepts parlent tous du \textbf{risque}, mais sous des angles differents:
+\begin{itemize}
+  \item Altman Z'': \textbf{risque credit/solvabilite} d une entreprise.
+  \item Monte Carlo + VaR: \textbf{risque de marche/valorisation} d un portefeuille.
+  \item Arbre binomial: \textbf{valeur de la flexibilite} (options reelles) d un projet.
+  \item Veille de marche: \textbf{information de tendance et volatilite} qui peut servir
+  a calibrer $\sigma$ ou a choisir des scenarios.
+\end{itemize}
+Donc, la relation est \textbf{strategique} et \textbf{analytique}, pas automatique.
+
+\subsection{Cheminement pratique (du diagnostic a la decision)}
+Voici un cheminement coherent qui relie les modules dans une etude complete:
+\begin{enumerate}
+  \item \textbf{Diagnostiquer la sante financiere}: calcul du Z'' pour filtrer
+  les entreprises a risque.
+  \item \textbf{Choisir les hypotheses de marche}: estimer $\mu$ et $\sigma$ a partir
+  des proxys sectoriels (veille de marche) ou d historiques.
+  \item \textbf{Simuler la distribution de valeur}: lancer Monte Carlo pour obtenir
+  la distribution des valeurs finales.
+  \item \textbf{Mesurer le risque de perte}: calculer VaR/CVaR sur les rendements
+  terminaux pour quantifier les scenarios defavorables.
+  \item \textbf{Evaluer la flexibilite}: si le projet a des options (expansion,
+  abandon), valoriser via l arbre binomial.
+  \item \textbf{Synthese decisionnelle}: combiner Z'' (solvabilite), VaR/CVaR
+  (risque de marche) et options (valeur strategique).
+\end{enumerate}
+
+\subsection{Lecture simple des differences}
+\begin{itemize}
+  \item \textbf{Z''} = score deterministe base sur le bilan.
+  \item \textbf{VaR/CVaR} = quantiles d une distribution simulee (stochastique).
+  \item \textbf{Monte Carlo} = moteur qui genere cette distribution.
+\end{itemize}
+Autrement dit, Z'' repond a \emph{``qui est fragile?''} et VaR repond a
+\emph{``combien peut-on perdre, avec quelle probabilite?''}.
+
+\section{Scoring Altman Z'' (entreprises non cotees)}
+\subsection{Objectif}
+Evaluer le risque de defaillance d une entreprise non cotee avec un score composite.
+Le modele Altman Z'' est adapte aux entreprises non manufacturieres et non cotees.
+
+\subsection{Formule}
+\begin{equation}
+Z'' = 6.56 X_1 + 3.26 X_2 + 6.72 X_3 + 1.05 X_4
+\end{equation}
+
+\subsection{Definition des ratios}
+\begin{align}
+X_1 &= \frac{Working\ Capital}{Total\ Assets} \\
+X_2 &= \frac{Retained\ Earnings}{Total\ Assets} \\
+X_3 &= \frac{EBIT}{Total\ Assets} \\
+X_4 &= \frac{Book\ Equity}{Total\ Liabilities}
+\end{align}
+\textbf{Interpretation:}
+\begin{itemize}
+  \item $X_1$ mesure la liquidite de court terme (fonds de roulement).
+  \item $X_2$ mesure la capacite d autofinancement historique.
+  \item $X_3$ mesure la rentabilite economique.
+  \item $X_4$ mesure la solvabilite (poids des fonds propres).
+\end{itemize}
+
+\subsection{Zones de risque}
+\begin{itemize}
+  \item $Z'' > 2.60$: zone \textit{Safe} (faible risque).
+  \item $1.10 < Z'' \le 2.60$: \textit{Zone grise} (risque a surveiller).
+  \item $Z'' \le 1.10$: \textit{Distress} (risque eleve).
+\end{itemize}
+
+\subsection{Logique de calcul}
+\begin{enumerate}
+  \item Charger les donnees (synthetiques ou CSV reel).
+  \item Calculer $X_1$ a $X_4$ avec un epsilon pour eviter la division par zero.
+  \item Appliquer la formule $Z''$.
+  \item Classer chaque entreprise dans une zone de risque.
+  \item Trier et produire un rapport.
+\end{enumerate}
+
+\subsection{Courbes generees (scoring)}
+\paragraph{Histogramme des $Z''$}
+\begin{itemize}
+  \item La distribution des scores est affichee.
+  \item Les zones sont colorees selon les seuils (distress, gris, safe).
+\end{itemize}
+
+\paragraph{Camembert des zones}
+\begin{itemize}
+  \item Comptage des entreprises par zone.
+  \item Le pourcentage est affiche pour chaque zone.
+\end{itemize}
+
+\paragraph{Barplot de classement}
+\begin{itemize}
+  \item Barres horizontales par entreprise (les plus a risque en haut).
+  \item Couleurs selon le seuil de risque.
+\end{itemize}
+
+\paragraph{Heatmap des ratios}
+\begin{itemize}
+  \item Matrice $X_1$--$X_4$ pour les $n$ entreprises les plus a risque.
+  \item Palette divergente pour visualiser les extremes.
+\end{itemize}
+
+\section{Monte Carlo (stress testing)}
+\subsection{Objectif}
+Simuler des trajectoires de valeur d un portefeuille afin d evaluer le risque.
+On utilise un mouvement brownien geometrique (GBM).
+
+\subsection{Modele GBM}
+\begin{equation}
+S_{t+\Delta t} = S_t \cdot \exp\left((\mu - \tfrac{1}{2}\sigma^2)\Delta t + \sigma \sqrt{\Delta t} Z\right)
+\end{equation}
+avec $Z \sim \mathcal{N}(0,1)$, $\mu$ le rendement espere annuel, $\sigma$ la volatilite.
+
+\subsection{Construction des trajectoires}
+\begin{enumerate}
+  \item Choisir $S_0$, $\mu$, $\sigma$, $T$, $\Delta t$.
+  \item Calculer $n\_steps = T/\Delta t$.
+  \item Generer une matrice de chocs $Z$ (loi normale).
+  \item Appliquer la formule GBM pas a pas pour chaque simulation.
+\end{enumerate}
+
+\subsection{Mesures de risque}
+\paragraph{Rendement terminal}
+\begin{equation}
+R = \frac{S_T - S_0}{S_0}
+\end{equation}
+
+\paragraph{VaR et CVaR}
+Pour un niveau de confiance $c$ (ex: 95\%):
+\begin{align}
+VaR_c &= \text{percentile}_{1-c}(R) \\
+CVaR_c &= \mathbb{E}[R \mid R \le VaR_c]
+\end{align}
+\textbf{Interpretation:} VaR mesure une perte maximale probable a un niveau de confiance, CVaR mesure la perte moyenne conditionnelle dans les pires cas.
+
+\subsection{Courbes generees (Monte Carlo)}
+\paragraph{Fan chart}
+\begin{itemize}
+  \item Superposition de trajectoires transparentes (evolution possible).
+  \item Courbes de percentiles (P5, P25, P50, P75, P95).
+  \item Bande entre P5 et P95 pour visualiser l incertitude.
+\end{itemize}
+
+\paragraph{Distribution des rendements}
+\begin{itemize}
+  \item Histogramme des rendements terminaux.
+  \item Courbe de densite (KDE).
+  \item Lignes verticales pour VaR et CVaR.
+\end{itemize}
+
+\section{Arbre binomial CRR (options reelles)}
+\subsection{Objectif}
+Valoriser des flexibilites strategiques (expansion, abandon, deferement) avec un arbre binomial.
+
+\subsection{Parametres du modele}
+\begin{align}
+\Delta t &= T/N \\
+u &= e^{\sigma \sqrt{\Delta t}} \\
+d &= 1/u \\
+p &= \frac{e^{r\Delta t} - d}{u - d}
+\end{align}
+\textbf{Interpretation:}
+\begin{itemize}
+  \item $u$ et $d$ sont les facteurs de hausse et baisse.
+  \item $p$ est la probabilite risque-neutre.
+\end{itemize}
+
+\subsection{Construction de l arbre}
+\begin{enumerate}
+  \item Construire l arbre des valeurs d actif.
+  \item Calculer la valeur de l option a maturite (payoff).
+  \item Remonter l arbre par induction backward:
+\end{enumerate}
+\begin{equation}
+V_{i,j} = \max\left(\text{intrinsic}, e^{-r\Delta t}\left(p V_{i+1,j} + (1-p)V_{i+1,j+1}\right)\right)
+\end{equation}
+Cette formule permet l exercice anticipe (option americaine).
+
+\subsection{Courbe generee (arbre)}
+\begin{itemize}
+  \item Les noeuds affichent la valeur de l actif et la valeur de l option.
+  \item Les niveaux representent les dates $t_0, t_1, ..., t_N$.
+\end{itemize}
+
+\section{Veille de marche et indicateurs techniques}
+\subsection{Donnees}
+Les donnees OHLCV (Open, High, Low, Close, Volume) sont telechargees via yfinance.
+
+\subsection{Indicateurs techniques}
+\paragraph{Moyennes mobiles}
+\begin{align}
+MA_{20}(t) &= \frac{1}{20} \sum_{k=0}^{19} Close_{t-k} \\
+MA_{50}(t) &= \frac{1}{50} \sum_{k=0}^{49} Close_{t-k}
+\end{align}
+Les moyennes mobiles donnent la tendance de court et moyen terme.
+
+\paragraph{Rendements et volatilite}
+\begin{align}
+R_t &= \frac{Close_t - Close_{t-1}}{Close_{t-1}} \\
+\sigma_{20} &= \text{std}(R_{t-19}, ..., R_t) \cdot \sqrt{252}
+\end{align}
+La volatilite est annualisee avec $\sqrt{252}$ pour des donnees quotidiennes.
+
+\paragraph{RSI (Relative Strength Index)}
+\begin{align}
+RS &= \frac{\text{avg\_gain}_{14}}{\text{avg\_loss}_{14}} \\
+RSI &= 100 - \frac{100}{1+RS}
+\end{align}
+RSI mesure le momentum (surachat au-dessus de 70, survente en dessous de 30).
+
+\paragraph{Bandes de Bollinger}
+\begin{align}
+BB_{upper} &= MA_{20} + 2\sigma_{20} \\
+BB_{lower} &= MA_{20} - 2\sigma_{20} \\
+BB_{width} &= \frac{BB_{upper} - BB_{lower}}{MA_{20}}
+\end{align}
+Elles quantifient la volatilite relative autour de la moyenne.
+
+\subsection{Score de tendance sectorielle}
+Pour chaque ticker, un score composite est calcule:
+\begin{itemize}
+  \item Rendement 1 mois $ret_{1m}$ (sur 21 seances),
+  \item RSI recent $rsi$,
+  \item Position relative aux MA (MA20, MA50).
+\end{itemize}
+Score de base:
+\begin{align}
+score\_ret &= \text{clip}(ret_{1m} \cdot 200, -50, 50) \\
+score\_rsi &= rsi - 50 \\
+trend\_score &= score\_ret + score\_rsi
+\end{align}
+Le score final est ensuite traduit en signal (Fort haussier, Haussier, Neutre, Baissier, Fort baissier).
+
+\subsection{Courbes generees (veille)}
+\paragraph{Dashboard prix + indicateurs}
+\begin{itemize}
+  \item Courbe du prix de cloture.
+  \item Superposition MA20 et MA50.
+  \item Bandes de Bollinger pour la volatilite.
+  \item Volumes colores selon le signe du rendement.
+  \item RSI avec seuils 30/70.
+\end{itemize}
+
+\paragraph{Heatmap sectorielle}
+\begin{itemize}
+  \item Tableau compare $ret_{1w}$, $ret_{1m}$, $RSI$, $trend\_score$.
+  \item Palette divergente pour visualiser les extremes.
+\end{itemize}
+
+\section{Interpretation globale et bonnes pratiques}
+\begin{itemize}
+  \item Toujours verifier la qualite des donnees (valeurs manquantes, outliers).
+  \item Ajuster les parametres ($\mu$, $\sigma$, $T$, $N$) selon le contexte.
+  \item Ne pas confondre indicateurs techniques (tendance) et fondamentaux (valeur intrinsique).
+  \item Utiliser les courbes comme outils d aide a la decision, pas comme verdict final.
+\end{itemize}
+
+\end{document}

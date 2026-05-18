@@ -1,0 +1,6 @@
+﻿sector,nb_entreprises,z_score_moyen,z_score_min,z_score_max,pct_distress,pct_safe
+Agroalimentaire,22,2.378,-0.25,4.714,22.727,40.909
+Immobilier,26,1.46,-1.334,4.218,30.769,23.077
+Industrie,18,2.848,-0.145,5.104,22.222,55.556
+Services,19,2.441,-0.485,4.102,15.789,57.895
+Tech,15,2.667,-0.756,4.423,13.333,60.0

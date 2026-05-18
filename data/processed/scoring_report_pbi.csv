@@ -1,0 +1,101 @@
+﻿company_name,sector,z_score,risk_zone,X1,X2,X3,X4,risk_score_100,risk_category_num,rank
+Entreprise_014,Immobilier,-1.3339,Distress,-0.1776,-0.0353,-0.0511,0.2751,0.0,1,1
+Entreprise_026,Immobilier,-0.8016,Distress,-0.1731,0.0771,-0.0312,0.2781,8.3,1,2
+Entreprise_063,Tech,-0.7555,Distress,-0.0801,0.0047,-0.0502,0.0876,9.0,1,3
+Entreprise_059,Immobilier,-0.571,Distress,-0.1269,0.0199,-0.0449,0.4744,11.9,1,4
+Entreprise_067,Services,-0.4852,Distress,-0.1214,0.0708,-0.0328,0.2864,13.2,1,5
+Entreprise_005,Agroalimentaire,-0.2504,Distress,-0.1349,0.0065,0.0738,0.1117,16.8,1,6
+Entreprise_042,Immobilier,-0.1618,Distress,-0.0554,-0.0766,-0.0398,0.6846,18.2,1,7
+Entreprise_057,Agroalimentaire,-0.161,Distress,-0.1209,0.0733,0.0137,0.2869,18.2,1,8
+Entreprise_089,Immobilier,-0.1562,Distress,-0.1893,-0.062,0.1659,0.1645,18.3,1,9
+Entreprise_023,Industrie,-0.145,Distress,-0.0464,-0.076,0.0402,0.1307,18.5,1,10
+Entreprise_054,Agroalimentaire,-0.0994,Distress,-0.1137,0.1314,-0.0435,0.4859,19.2,1,11
+Entreprise_025,Immobilier,0.0878,Distress,-0.1012,0.2063,-0.028,0.2546,22.1,1,12
+Entreprise_019,Services,0.1411,Distress,-0.0097,-0.048,0.0301,0.1516,22.9,1,13
+Entreprise_087,Industrie,0.6186,Distress,0.0804,-0.0572,-0.0388,0.5124,30.3,1,14
+Entreprise_045,Industrie,0.6738,Distress,-0.108,0.2796,-0.0759,0.9346,31.2,1,15
+Entreprise_080,Immobilier,0.7381,Distress,-0.1365,0.0297,0.1843,0.2837,32.2,1,16
+Entreprise_034,Agroalimentaire,0.8005,Distress,-0.0104,0.0122,0.0782,0.2893,33.2,1,17
+Entreprise_013,Immobilier,0.8391,Distress,-0.0619,0.0397,-0.0414,1.3273,33.8,1,18
+Entreprise_072,Industrie,0.8921,Distress,0.0932,0.1164,-0.0681,0.3418,34.6,1,19
+Entreprise_077,Tech,1.0644,Distress,-0.1851,0.262,-0.0013,1.3648,37.3,1,20
+Entreprise_038,Services,1.075,Distress,-0.1433,0.0681,0.2339,0.2108,37.4,1,21
+Entreprise_073,Agroalimentaire,1.0903,Distress,0.1977,0.0478,-0.0782,0.1554,37.7,1,22
+Entreprise_049,Immobilier,1.1049,Zone Grise,-0.0821,0.2508,0.0713,0.3304,37.9,2,23
+Entreprise_003,Immobilier,1.121,Zone Grise,-0.1159,0.1043,0.1064,0.7866,38.1,2,24
+Entreprise_011,Agroalimentaire,1.1311,Zone Grise,-0.1354,-0.0342,0.2273,0.5744,38.3,2,25
+Entreprise_021,Agroalimentaire,1.1345,Zone Grise,-0.0254,-0.0751,0.1716,0.374,38.3,2,26
+Entreprise_022,Tech,1.1813,Zone Grise,0.109,-0.0214,0.0093,0.4509,39.1,2,27
+Entreprise_099,Immobilier,1.1979,Zone Grise,0.0245,0.1655,-0.062,0.8707,39.3,2,28
+Entreprise_016,Immobilier,1.2635,Zone Grise,0.0226,-0.0255,0.0581,0.7695,40.3,2,29
+Entreprise_098,Immobilier,1.2851,Zone Grise,0.0475,0.014,0.1218,0.1038,40.7,2,30
+Entreprise_046,Services,1.4321,Zone Grise,-0.0924,0.3062,0.0699,0.5433,43.0,2,31
+Entreprise_037,Services,1.4325,Zone Grise,0.0242,-0.0778,0.1569,0.4509,43.0,2,32
+Entreprise_100,Industrie,1.4328,Zone Grise,0.0555,-0.0572,0.1234,0.4056,43.0,2,33
+Entreprise_040,Immobilier,1.4864,Zone Grise,-0.0425,-0.0542,0.2007,0.5654,43.8,2,34
+Entreprise_050,Immobilier,1.4911,Zone Grise,-0.0138,0.1891,0.066,0.497,43.9,2,35
+Entreprise_065,Agroalimentaire,1.5624,Zone Grise,0.2292,0.0649,-0.0704,0.3051,45.0,2,36
+Entreprise_075,Immobilier,1.6779,Zone Grise,-0.0281,0.2819,0.12,0.131,46.8,2,37
+Entreprise_043,Immobilier,1.695,Zone Grise,-0.1263,0.3162,0.1141,0.6916,47.0,2,38
+Entreprise_004,Agroalimentaire,1.8165,Zone Grise,0.1324,0.0115,0.1089,0.1699,48.9,2,39
+Entreprise_085,Immobilier,1.8418,Zone Grise,0.3598,-0.0406,-0.0668,0.0592,49.3,2,40
+Entreprise_055,Agroalimentaire,1.88,Zone Grise,-0.1916,0.2859,0.249,0.5064,49.9,2,41
+Entreprise_066,Tech,1.9258,Zone Grise,0.2434,0.0474,-0.0005,0.1698,50.6,2,42
+Entreprise_068,Tech,1.929,Zone Grise,-0.1257,0.2086,0.1763,0.8467,50.7,2,43
+Entreprise_095,Services,2.1122,Zone Grise,0.1636,0.2522,0.0094,0.1466,53.5,2,44
+Entreprise_090,Services,2.1168,Zone Grise,-0.1345,0.3212,0.1279,1.0407,53.6,2,45
+Entreprise_081,Services,2.2987,Zone Grise,-0.1158,0.2307,0.2262,0.7489,56.4,2,46
+Entreprise_082,Agroalimentaire,2.3014,Zone Grise,0.0515,-0.0089,0.1748,0.7793,56.5,2,47
+Entreprise_079,Agroalimentaire,2.3238,Zone Grise,0.1804,0.1848,-0.0611,0.9035,56.8,2,48
+Entreprise_056,Industrie,2.3655,Zone Grise,-0.0622,0.1083,0.2101,0.9605,57.5,2,49
+Entreprise_060,Immobilier,2.3727,Zone Grise,0.1038,-0.0371,0.2497,0.1283,57.6,2,50
+Entreprise_039,Tech,2.398,Zone Grise,0.2481,0.1357,-0.0409,0.5744,58.0,2,51
+Entreprise_069,Industrie,2.4151,Zone Grise,0.3565,0.0336,-0.0146,0.0617,58.2,2,52
+Entreprise_027,Agroalimentaire,2.4986,Zone Grise,0.0611,0.0431,0.2289,0.3993,59.5,2,53
+Entreprise_086,Immobilier,2.5466,Zone Grise,0.2826,0.1765,-0.0134,0.1976,60.3,2,54
+Entreprise_033,Industrie,2.5705,Zone Grise,0.1113,0.0065,0.1775,0.5963,60.6,2,55
+Entreprise_035,Services,2.6145,Safe,0.2632,0.1571,0.0442,0.0751,61.3,3,56
+Entreprise_093,Services,2.6435,Safe,-0.0604,0.2604,0.1624,1.047,61.8,3,57
+Entreprise_094,Tech,2.7531,Safe,0.1185,0.1672,-0.0163,1.4672,63.5,3,58
+Entreprise_008,Immobilier,2.8015,Safe,0.1957,-0.0526,0.1838,0.4331,64.2,3,59
+Entreprise_061,Services,2.8377,Safe,0.2166,0.115,0.1397,0.0985,64.8,3,60
+Entreprise_009,Tech,2.849,Safe,0.2362,-0.07,0.0824,0.9277,65.0,3,61
+Entreprise_006,Services,2.9104,Safe,0.2033,0.2357,0.0925,0.1778,65.9,3,62
+Entreprise_071,Immobilier,2.9511,Safe,-0.0194,0.3124,0.1366,1.0881,66.6,3,63
+Entreprise_031,Agroalimentaire,3.0186,Safe,0.3345,-0.0804,0.1025,0.379,67.6,3,64
+Entreprise_012,Services,3.0618,Safe,0.3496,0.2711,-0.0405,0.1492,68.3,3,65
+Entreprise_044,Tech,3.0655,Safe,0.2987,-0.0554,0.1464,0.2885,68.3,3,66
+Entreprise_074,Industrie,3.1306,Safe,0.3734,0.1409,-0.063,0.6141,69.3,3,67
+Entreprise_024,Services,3.2215,Safe,0.3616,0.166,0.0238,0.1412,70.8,3,68
+Entreprise_088,Tech,3.2677,Safe,0.2709,0.2266,0.0865,0.1629,71.5,3,69
+Entreprise_062,Immobilier,3.2715,Safe,0.1487,0.0876,0.1345,1.0538,71.5,3,70
+Entreprise_092,Services,3.2914,Safe,0.2781,0.3315,-0.0288,0.5523,71.8,3,71
+Entreprise_007,Industrie,3.3282,Safe,-0.0313,0.2675,0.1721,1.4332,72.4,3,72
+Entreprise_015,Immobilier,3.4294,Safe,0.1329,0.3144,0.1371,0.5821,74.0,3,73
+Entreprise_001,Industrie,3.4825,Safe,0.2958,0.1934,0.1233,0.0791,74.8,3,74
+Entreprise_051,Immobilier,3.5739,Safe,0.2664,0.2505,0.0196,0.8355,76.2,3,75
+Entreprise_053,Tech,3.6323,Safe,0.1004,0.1412,0.1778,1.2552,77.1,3,76
+Entreprise_036,Industrie,3.6359,Safe,0.197,0.0873,0.2456,0.3891,77.2,3,77
+Entreprise_010,Industrie,3.7516,Safe,0.2612,0.1675,0.1179,0.6667,79.0,3,78
+Entreprise_048,Services,3.7818,Safe,0.3247,0.2609,0.0175,0.651,79.5,3,79
+Entreprise_064,Services,3.7875,Safe,0.2825,0.0654,0.216,0.2568,79.6,3,80
+Entreprise_070,Agroalimentaire,3.8717,Safe,0.0385,0.327,0.2205,1.02,80.9,3,81
+Entreprise_047,Agroalimentaire,3.8742,Safe,0.1596,0.3408,0.1924,0.4031,80.9,3,82
+Entreprise_032,Tech,3.8978,Safe,0.3361,-0.0183,0.2289,0.2044,81.3,3,83
+Entreprise_017,Agroalimentaire,3.9462,Safe,0.2979,0.0281,0.1755,0.6866,82.0,3,84
+Entreprise_084,Services,3.9987,Safe,0.1576,0.2873,0.1965,0.6736,82.8,3,85
+Entreprise_030,Agroalimentaire,4.039,Safe,0.2492,0.283,0.1608,0.3822,83.5,3,86
+Entreprise_018,Industrie,4.0963,Safe,0.285,-0.0309,0.1415,1.3112,84.3,3,87
+Entreprise_028,Services,4.1018,Safe,0.3954,0.127,0.0645,0.6288,84.4,3,88
+Entreprise_020,Agroalimentaire,4.1145,Safe,0.3717,-0.0905,0.2165,0.4916,84.6,3,89
+Entreprise_097,Tech,4.1401,Safe,0.1619,0.3257,0.2435,0.3622,85.0,3,90
+Entreprise_029,Agroalimentaire,4.1649,Safe,0.335,0.2938,0.0465,0.664,85.4,3,91
+Entreprise_002,Immobilier,4.2185,Safe,0.3377,0.2904,-0.0235,1.1565,86.2,3,92
+Entreprise_078,Tech,4.2335,Safe,0.1331,0.1397,0.2003,1.4845,86.5,3,93
+Entreprise_058,Industrie,4.3811,Safe,0.2066,0.1878,0.1962,1.0432,88.8,3,94
+Entreprise_096,Tech,4.4232,Safe,0.3206,0.2578,0.1543,0.4215,89.4,3,95
+Entreprise_076,Agroalimentaire,4.5505,Safe,0.3549,0.1937,0.1845,0.3346,91.4,3,96
+Entreprise_083,Industrie,4.5702,Safe,0.3797,0.2127,0.1504,0.3574,91.7,3,97
+Entreprise_091,Agroalimentaire,4.7144,Safe,0.2977,-0.0382,0.2009,1.4632,93.9,3,98
+Entreprise_041,Industrie,4.9592,Safe,0.3621,0.2751,0.1302,0.7734,97.8,3,99
+Entreprise_052,Industrie,5.104,Safe,0.3831,-0.0395,0.2231,1.1623,100.0,3,100
