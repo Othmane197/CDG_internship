@@ -57,12 +57,40 @@ Voici un cheminement coherent qui relie les modules dans une etude complete:
   des proxys sectoriels (veille de marche) ou d historiques.
   \item \textbf{Simuler la distribution de valeur}: lancer Monte Carlo pour obtenir
   la distribution des valeurs finales.
-  \item \textbf{Mesurer le risque de perte}: calculer VaR/CVaR sur les rendements
-  terminaux pour quantifier les scenarios defavorables.
-  \item \textbf{Evaluer la flexibilite}: si le projet a des options (expansion,
-  abandon), valoriser via l arbre binomial.
-  \item \textbf{Synthese decisionnelle}: combiner Z'' (solvabilite), VaR/CVaR
-  (risque de marche) et options (valeur strategique).
+  \item \textbf{Mesurer le risque de perte (VaR/CVaR)}:
+  \begin{itemize}
+    \item A partir des trajectoires, on observe les rendements terminaux $R$.
+    \item La VaR au niveau $c$ est un quantile: $VaR_c = \text{percentile}_{1-c}(R)$.
+    \item En termes de \emph{perte} $L=-R$, on peut ecrire $VaR_c(L)$ comme la perte
+    qui n est depassee que dans $100(1-c)\%$ des cas.
+    \item La CVaR (ou Expected Shortfall) est la \emph{moyenne} des pires cas:
+    $CVaR_c = \mathbb{E}[R \mid R \le VaR_c]$. Elle donne la perte moyenne
+    lorsque le scenario est deja mauvais.
+    \item Interpretation: la VaR est un \emph{seuil}, la CVaR est la \emph{severite}
+    des pertes au dela de ce seuil. C est un langage utile pour fixer des limites
+    de risque et comparer des projets.
+  \end{itemize}
+  \item \textbf{Evaluer la flexibilite (options reelles)}:
+  \begin{itemize}
+    \item Beaucoup de projets ont des choix futurs: expandre, abandonner, deferer.
+    \item L actif sous jacent est la \emph{valeur du projet} (ex: VAN), pas une action.
+    \item La volatilite $\sigma$ capture l incertitude sectorielle; plus $\sigma$ est
+    elevee, plus la flexibilite a de la valeur (effet option).
+    \item L arbre binomial construit des valeurs possibles du projet et calcule,
+    a chaque noeud, la meilleure decision: exercer ou attendre.
+    \item La formule de backward induction applique l actualisation et la
+    probabilite risque neutre $p$ pour obtenir la valeur aujourd hui.
+  \end{itemize}
+  \item \textbf{Synthese decisionnelle (vision globale du risque)}:
+  \begin{itemize}
+    \item \textbf{Z''} repond a \emph{``l entreprise est elle structurellement saine?''}
+    \item \textbf{VaR/CVaR} repond a \emph{``combien peut on perdre en scenario defavorable?''}
+    \item \textbf{Options reelles} repond a \emph{``quelle valeur apporte la flexibilite?''}
+    \item La decision combine ces axes: un projet peut etre riske (VaR elevee) mais
+    acceptable si la flexibilite est forte et la structure financiere solide.
+    \item A l inverse, un Z'' faible plus une VaR elevee indique un risque a
+    limiter ou a rejeter.
+  \end{itemize}
 \end{enumerate}
 
 \subsection{Lecture simple des differences}
@@ -159,6 +187,58 @@ avec $Z \sim \mathcal{N}(0,1)$, $\mu$ le rendement espere annuel, $\sigma$ la vo
   \item Appliquer la formule GBM pas a pas pour chaque simulation.
 \end{enumerate}
 
+\subsection{Exemple numerique: 5 premieres iterations}
+Objectif: voir exactement comment la valeur evolue pas a pas.
+
+\paragraph{Parametres fixes}
+On prend un exemple simple (mensuel):
+\begin{itemize}
+  \item $S_0 = 100$
+  \item $\mu = 0.10$, $\sigma = 0.20$
+  \item $\Delta t = 1/12$
+\end{itemize}
+On calcule d abord les constantes:
+\begin{align}
+  	ext{drift} &= (\mu - 0.5\sigma^2)\Delta t = (0.10 - 0.02)\cdot\frac{1}{12} = 0.0066667 \\
+  	ext{shock} &= \sigma\sqrt{\Delta t} = 0.20\sqrt{\frac{1}{12}} = 0.057735
+\end{align}
+La mise a jour est:
+\begin{equation}
+S_{t+\Delta t} = S_t \cdot \exp\left(\text{drift} + \text{shock}\cdot Z_t\right)
+\end{equation}
+
+\paragraph{Tirages aleatoires (exemple)}
+On fixe 5 valeurs possibles de $Z_t$ (normal standard) pour illustrer:
+\begin{equation}
+Z_1=0.5,\; Z_2=-1.0,\; Z_3=0.0,\; Z_4=1.0,\; Z_5=-0.5
+\end{equation}
+
+\paragraph{Calcul pas a pas}
+On note $g_t = \text{drift} + \text{shock}\cdot Z_t$ et le facteur $f_t = e^{g_t}$.
+\begin{center}
+\begin{tabular}{c c c c c}
+\hline
+Etape & $Z_t$ & $g_t$ & $f_t$ & $S_t$ \\
+\hline
+0 & - & - & - & 100.00 \\
+1 & 0.5 & 0.0355 & 1.0362 & 103.62 \\
+2 & -1.0 & -0.0511 & 0.9502 & 98.46 \\
+3 & 0.0 & 0.0067 & 1.0067 & 99.12 \\
+4 & 1.0 & 0.0644 & 1.0666 & 105.71 \\
+5 & -0.5 & -0.0222 & 0.9780 & 103.39 \\
+\hline
+\end{tabular}
+\end{center}
+
+\paragraph{Lecture pedagogique}
+\begin{itemize}
+  \item Chaque etape multiplie $S_t$ par un facteur $f_t$.
+  \item Si $Z_t$ est positif, $f_t>1$ et la valeur monte.
+  \item Si $Z_t$ est negatif, $f_t<1$ et la valeur baisse.
+  \item Une trajectoire complete est juste la repetition de ce mecanisme.
+\end{itemize}
+Dans le code, on fait ce calcul pour \emph{des milliers} de trajectoires.
+
 \subsection{Mesures de risque}
 \paragraph{Rendement terminal}
 \begin{equation}
@@ -172,6 +252,76 @@ VaR_c &= \text{percentile}_{1-c}(R) \\
 CVaR_c &= \mathbb{E}[R \mid R \le VaR_c]
 \end{align}
 \textbf{Interpretation:} VaR mesure une perte maximale probable a un niveau de confiance, CVaR mesure la perte moyenne conditionnelle dans les pires cas.
+
+\paragraph{Percentiles (P5, P25, P50, P75, P95)}
+Dans le fan chart, on calcule des percentiles de la distribution a chaque date.
+Si l on a $n$ valeurs et qu on veut le percentile $P_p$ (ex: $p=5,25,50,75,95$),
+une regle simple (``nearest rank'') est:
+\begin{equation}
+k = \lceil p/100 \cdot n \rceil, \quad P_p = x_{(k)}
+\end{equation}
+ou $x_{(k)}$ est la $k$-ieme valeur apres tri.
+Avec peu de simulations, ces percentiles deviennent tres grossiers.
+
+\subsection{Exemple VaR avec 5 simulations}
+On suppose que Monte Carlo ne produit que 5 trajectoires. On calcule VaR sur
+les rendements terminaux $R_i$ de ces 5 trajectoires.
+
+\paragraph{Etape 1: valeurs terminales}
+Supposons $S_0 = 100$ et 5 valeurs finales simulees:
+\begin{equation}
+S_T = \{88, 95, 102, 106, 109\}
+\end{equation}
+
+\paragraph{Etape 2: rendements}
+\begin{equation}
+R_i = \frac{S_{T,i} - S_0}{S_0}
+\end{equation}
+Donc:
+\begin{equation}
+R = \{-12\%, -5\%, 2\%, 6\%, 9\%\}
+\end{equation}
+
+\paragraph{Etape 3: tri}
+On trie les rendements: $R_{(1)} \le R_{(2)} \le \dots \le R_{(5)}$.
+Ici:
+\begin{equation}
+R_{(1)}=-12\%,\; R_{(2)}=-5\%,\; R_{(3)}=2\%,\; R_{(4)}=6\%,\; R_{(5)}=9\%
+\end{equation}
+
+\paragraph{Etape 3b: percentiles de la distribution}
+Avec $n=5$ et la regle du rang le plus proche:
+\begin{align}
+P_5 &= R_{(\lceil 0.05\cdot 5 \rceil)} = R_{(1)} = -12\% \\
+P_{25} &= R_{(\lceil 0.25\cdot 5 \rceil)} = R_{(2)} = -5\% \\
+P_{50} &= R_{(\lceil 0.50\cdot 5 \rceil)} = R_{(3)} = 2\% \\
+P_{75} &= R_{(\lceil 0.75\cdot 5 \rceil)} = R_{(4)} = 6\% \\
+P_{95} &= R_{(\lceil 0.95\cdot 5 \rceil)} = R_{(5)} = 9\%
+\end{align}
+Cela montre pourquoi, avec peu de trajectoires, les percentiles sont tres
+sensibles au moindre changement des donnees.
+
+\paragraph{Etape 4: VaR empirique}
+Une regle simple (``nearest rank'') est:
+\begin{equation}
+k = \lceil (1-c)\,n \rceil,\quad VaR_c = R_{(k)}
+\end{equation}
+Avec $n=5$ et $c=95\%$:
+\begin{equation}
+k=\lceil 0.05 \cdot 5 \rceil = 1,\quad VaR_{95} = R_{(1)} = -12\%
+\end{equation}
+En termes de \emph{perte} $L=-R$, cela correspond a une perte de $12\%$.
+
+\paragraph{Etape 5: CVaR empirique}
+La CVaR est la moyenne des rendements dans la queue gauche:
+\begin{equation}
+CVaR_{95} = \text{moyenne}\{R_i \mid R_i \le VaR_{95}\} = -12\%
+\end{equation}
+
+\paragraph{Message cle}
+Avec seulement 5 simulations, la VaR devient pratiquement le pire scenario.
+Dans la pratique, on utilise des milliers de trajectoires pour avoir un
+quantile plus stable.
 
 \subsection{Courbes generees (Monte Carlo)}
 \paragraph{Fan chart}

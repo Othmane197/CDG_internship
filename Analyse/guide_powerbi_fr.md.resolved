@@ -1,0 +1,169 @@
+# Guide Power BI — Tableau de Bord CDG Invest
+
+## ÉTAPE 0 — Importer les 3 fichiers CSV
+
+1. Ouvrez **Power BI Desktop**
+2. Cliquez sur **Accueil** dans le ruban → **Obtenir des données** → **Texte/CSV**
+3. Naviguez vers :
+   ```
+   Bureau\CDG\data\processed\
+   ```
+4. Importez **scoring_report_pbi.csv** → cliquez **Charger**
+5. Répétez pour **sector_aggregates_pbi.csv** → **Charger**
+6. Répétez pour **zone_summary_pbi.csv** → **Charger**
+
+> ✅ Les 3 tables apparaissent dans le panneau **Données** (à droite)
+
+---
+
+## VISUEL 1 — Graphique en anneau (Répartition des zones de risque)
+
+**Nom dans PBI :** `Graphique en anneau`
+
+### Procédure :
+1. Dans le panneau **Visualisations** (à droite), cliquez sur l'icône **Graphique en anneau** (cercle creux)
+2. Un visuel vide apparaît sur la page
+3. Dans le panneau **Données**, sélectionnez la table **zone_summary_pbi**
+4. Faites glisser :
+   - `risk_zone` → case **Légende**
+   - `count` → case **Valeurs**
+   - `pct` → case **Info-bulles**
+5. Dans **Mise en forme du visuel** → **Couleurs des données** :
+   - `Distress` → **#ef4444** (rouge)
+   - `Zone Grise` → **#f59e0b** (orange)
+   - `Safe` → **#22c55e** (vert)
+6. Dans **Titre** → tapez : `Répartition du Portefeuille par Zone de Risque`
+
+---
+
+## VISUEL 2 — Graphique à barres groupées horizontales (Classement Z''-score)
+
+**Nom dans PBI :** `Graphique à barres groupées`
+
+### Procédure :
+1. Cliquez sur une zone vide de la page
+2. Dans **Visualisations**, cliquez sur **Graphique à barres groupées** (barres horizontales)
+3. Sélectionnez la table **scoring_report_pbi**
+4. Faites glisser :
+   - `company_name` → case **Axe Y**
+   - `z_score` → case **Axe X**
+   - `risk_zone` → case **Légende**
+5. Dans **Mise en forme** → **Axe Y** → **Trier par** → `z_score` → **Croissant** (plus risqué en haut)
+6. Ajoutez une **Ligne constante** :
+   - **Mise en forme** → **Ligne de référence** → **Ajouter une ligne**
+   - Valeur = `1.1`, Nom = `Seuil Distress`, Couleur = rouge
+   - Répétez : Valeur = `2.6`, Nom = `Seuil Safe`, Couleur = vert
+7. Dans **Titre** → tapez : `Classement des Entreprises par Z''-Score`
+
+> 💡 Réglez **Nombre de valeurs** à **20** pour n'afficher que les 20 premières
+
+---
+
+## VISUEL 3 — Compartimentage (Treemap sectoriel)
+
+**Nom dans PBI :** `Compartimentage`
+
+### Procédure :
+1. Cliquez sur une zone vide
+2. Dans **Visualisations**, cliquez sur **Compartimentage** (carrés imbriqués)
+3. Sélectionnez la table **sector_aggregates_pbi**
+4. Faites glisser :
+   - `sector` → case **Catégorie**
+   - `nb_entreprises` → case **Valeurs**
+   - `pct_distress` → case **Info-bulles**
+5. Dans **Couleurs des données** → activez **Mise en forme conditionnelle** → basé sur `pct_distress`
+   - Couleur minimale = vert `#22c55e` (peu de distress)
+   - Couleur maximale = rouge `#ef4444` (beaucoup de distress)
+6. Dans **Titre** → tapez : `Concentration du Risque par Secteur`
+
+---
+
+## VISUEL 4 — Nuage de points (Scatter plot Liquidité vs Rentabilité)
+
+**Nom dans PBI :** `Nuage de points`
+
+### Procédure :
+1. Cliquez sur une zone vide
+2. Dans **Visualisations**, cliquez sur **Nuage de points** (cercles épars)
+3. Sélectionnez la table **scoring_report_pbi**
+4. Faites glisser :
+   - `company_name` → case **Valeurs**
+   - `X1` (Liquidité) → case **Axe X**
+   - `X3` (Rentabilité) → case **Axe Y**
+   - `z_score` → case **Taille**
+   - `risk_zone` → case **Légende**
+5. Dans **Couleurs des données** : appliquez les mêmes couleurs (rouge/orange/vert)
+6. Dans **Quadrant** → activez les lignes → X = `0`, Y = `0`
+7. Dans **Titre** → tapez : `Liquidité (X1) vs Rentabilité (X3) par Entreprise`
+
+---
+
+## VISUEL 5 — Carte (KPI Cards — 3 cartes à créer)
+
+**Nom dans PBI :** `Carte`
+
+### Procédure (répéter 3 fois) :
+
+#### Carte 1 — Entreprises en Distress
+1. Cliquez zone vide → **Visualisations** → **Carte** (carré avec grand chiffre)
+2. Sélectionnez **zone_summary_pbi**
+3. Faites glisser `count` → case **Champs**
+4. Ajoutez un **Filtre sur ce visuel** : `risk_zone` = `Distress`
+5. **Mise en forme** → **Valeur de la légende** → Couleur = **#ef4444**
+6. **Titre** → `Entreprises en Distress`
+
+#### Carte 2 — Zone Grise
+- Même procédure, filtre `risk_zone` = `Zone Grise`, couleur **#f59e0b**
+- Titre : `Zone Grise (à surveiller)`
+
+#### Carte 3 — Zone Safe
+- Même procédure, filtre `risk_zone` = `Safe`, couleur **#22c55e**
+- Titre : `Entreprises Saines`
+
+---
+
+## VISUEL 6 — Table (Tableau de classement détaillé)
+
+**Nom dans PBI :** `Table`
+
+### Procédure :
+1. Cliquez zone vide → **Visualisations** → **Table** (grille)
+2. Sélectionnez **scoring_report_pbi**
+3. Faites glisser dans **Colonnes** (dans cet ordre) :
+   - `rank`
+   - `company_name`
+   - `sector`
+   - `z_score`
+   - `risk_zone`
+   - `risk_score_100`
+4. Dans **Mise en forme** → **Mise en forme conditionnelle** sur `z_score` :
+   - Choisir **Couleur d'arrière-plan**
+   - Couleur minimale = rouge, maximale = vert
+5. Activez le tri par `rank` **croissant**
+6. Dans **Titre** → tapez : `Tableau de Scoring — Toutes les Entreprises`
+
+---
+
+## ASTUCE FINALE — Connecter les visuels (Filtres croisés)
+
+Par défaut, Power BI active les **interactions** entre visuels automatiquement.
+- Cliquez sur `Distress` dans l'anneau → toute la page se filtre sur les entreprises en distress
+- Cliquez sur un secteur dans le Treemap → la table et le scatter se filtrent aussi
+
+Pour désactiver une interaction spécifique :
+1. Cliquez sur un visuel source
+2. **Format** → **Modifier les interactions**
+3. Cliquez sur l'icône 🚫 au-dessus du visuel cible
+
+---
+
+## Résumé des visuels et des tables sources
+
+| # | Nom français PBI | Table source | Objectif |
+|---|---|---|---|
+| 1 | Graphique en anneau | zone_summary_pbi | Répartition Safe/Grise/Distress |
+| 2 | Graphique à barres groupées | scoring_report_pbi | Classement Z''-score |
+| 3 | Compartimentage | sector_aggregates_pbi | Risque par secteur |
+| 4 | Nuage de points | scoring_report_pbi | Liquidité vs Rentabilité |
+| 5 | Carte (×3) | zone_summary_pbi | KPIs résumés |
+| 6 | Table | scoring_report_pbi | Classement détaillé |
